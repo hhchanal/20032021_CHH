@@ -27,6 +27,9 @@ app.get('/product', function (req, res) {
         if (value.type == 'B' && value.price > 20) {
           return false;
         }
+        else if (value.obsoleted == 1) {
+          return false;
+        }
         return true;
     });
     if (err) {
