@@ -40,6 +40,19 @@ app.get('/product', function (req, res) {
   });
 })
 
+app.post('/obsoleted', function (req, res) {
+  if (typeof req.query.productId === "undefined") {
+    res.status(400).json({ "error": "Missing query param - productId" });
+    return;
+  }
+
+  db.run(`UPDATE product SET obsoleted = 1 WHERE id = ${req.query.productId}`, (err) => {
+    if (err) {
+      res.status(400).json({ "error": err.message });
+      return;
+    }
+  })
+})
 
 app.get('/membership', function (req, res) {
   let grade;
