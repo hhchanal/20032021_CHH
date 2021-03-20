@@ -23,15 +23,12 @@ app.get('/', function (req, res) {
 // Get product info API
 app.get('/product', function (req, res) {
   db.all("SELECT * FROM product", (err, rows) => {
-    console.log(rows)
     rows = rows.filter(function(value, index, arr){
         if (value.type == 'B' && value.price > 20) {
-          console.log(value);
           return false;
         }
         return true;
     });
-
     if (err) {
       res.status(400).json({ "error": err.message });
       return;
@@ -41,18 +38,21 @@ app.get('/product', function (req, res) {
 })
 
 
-//Get membership info 
-// app.get('/membership', function (req, res) {
-//   let sql = `SELECT * FROM membership`;
-//   db.all(sql, (err, rows) => {
-//     if (err) {
-//       res.status(400).json({ "error": err.message });
-//       return;
-//     }
-//     res.status(200).json({ "data": rows });
-//   })
-
-// })
+app.get('/membership', function (req, res) {
+  let grade;
+  let sql = `SELECT * FROM membership`;
+  if (req.query.grade) {
+    grade = req.query.grade.toUpperCase();
+    sql = sql + ' WHERE grade = "' + grade + '"'
+  }
+  db.all(sql, (err, rows) => {
+    if (err) {
+      res.status(400).json({ "error": err.message });
+      return;
+    }
+    res.status(200).json({ "data": rows });
+  })
+})
 
 
 // Add product to cart API with query params productId
