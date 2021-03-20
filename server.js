@@ -23,6 +23,15 @@ app.get('/', function (req, res) {
 // Get product info API
 app.get('/product', function (req, res) {
   db.all("SELECT * FROM product", (err, rows) => {
+    console.log(rows)
+    rows = rows.filter(function(value, index, arr){
+        if (value.type == 'B' && value.price > 20) {
+          console.log(value);
+          return false;
+        }
+        return true;
+    });
+
     if (err) {
       res.status(400).json({ "error": err.message });
       return;
